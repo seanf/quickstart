@@ -18,6 +18,7 @@ package org.jboss.as.quickstarts.helloworld;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -25,6 +26,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static java.util.Arrays.asList;
 
 /**
  * <p>
@@ -56,8 +59,18 @@ public class HelloWorldServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         writer.println(PAGE_HEADER);
         writer.println("<h1>" + helloService.createHelloMessage("World") + "</h1>");
+        writer.println("<p><a href=\"hello/world\">Click Me</a></p>");
+        writer.println("<p>Query: " + req.getQueryString() + "</p>");
+        writer.println("<p>ParameterMap:<br/>" + toString(req.getParameterMap()) + "<br/></p>");
         writer.println(PAGE_FOOTER);
         writer.close();
+    }
+
+    private String toString(Map<String, String[]> map) {
+        StringBuilder sb = new StringBuilder();
+        map.forEach((String k, String[] v) ->
+                sb.append(k).append(": ").append(asList(v)).append("<br/>"));
+        return sb.toString();
     }
 
 }
